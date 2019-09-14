@@ -33,6 +33,9 @@
 </template>
 
 <script>
+//导入用户登录api
+import { userLogin } from '@/api/user'
+
 export default {
   name: 'login',
   data() {
@@ -65,7 +68,13 @@ export default {
       this.$validator.validate().then(valid => {
         if (valid) {
           //校验成功的逻辑
-          console.log(valid)
+          let res = userLogin({
+            mobile: this.mobile,
+            code: this.code
+          })
+          //将用户信息保存到localstorage中
+          this.$store.commit('setUserInfo', res)
+          this.$router.push('/home')
         }
       })
     }
