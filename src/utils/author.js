@@ -9,12 +9,12 @@ function setAuthor(value) {
 }
 
 //token的获取
-function getAuthor(value) {
+function getAuthor() {
   return window.localStorage.getItem(token) ? JSON.parse(window.localStorage.getItem(token)) : null
 }
 
 //token的清除
-function removeAuthor(value) {
+function removeAuthor() {
   window.localStorage.removeItem(token)
 }
 

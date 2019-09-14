@@ -9,8 +9,8 @@ function userLogin({ mobile, code }) {
     url: '/app/v1_0/authorizations',
     method: 'post',
     data: {
-      mobile,
-      code
+      mobile: mobile,
+      code: code
     }
   })
 }

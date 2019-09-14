@@ -2,7 +2,7 @@ import axios from 'axios'
 //创建一个axios实例对象
 
 const instance = axios.create({
-  baseURL: 'http://ttapi.research.itcast.cn/'
+  baseURL: 'http://ttapi.research.itcast.cn'
 })
 
 //设置请求拦截

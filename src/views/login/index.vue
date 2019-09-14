@@ -65,16 +65,21 @@ export default {
 
     doLogin() {
       //所有校验成功后的逻辑代码
-      this.$validator.validate().then(valid => {
+      this.$validator.validate().then(async valid => {
         if (valid) {
           //校验成功的逻辑
-          let res = userLogin({
-            mobile: this.mobile,
-            code: this.code
-          })
-          //将用户信息保存到localstorage中
-          this.$store.commit('setUserInfo', res)
-          this.$router.push('/home')
+          try {
+            let res = await userLogin({
+              mobile: this.mobile,
+              code: this.code
+            })
+            // console.log(res)
+            //将用户信息保存到localstorage中
+            this.$store.commit('setUserInfo', res)
+            this.$router.push('/home')
+          } catch (error) {
+            this.$notify({ type: 'danger', message: '登录失败' })
+          }
         }
       })
     }
