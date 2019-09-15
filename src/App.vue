@@ -10,5 +10,13 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less">
+//头部导航公共样式
+.van-nav-bar {
+  background-color: #1989fa !important;
+  .van-nav-bar__title {
+    color: #fff;
+    font-size: 18px;
+  }
+}
 </style>

@@ -100,13 +100,6 @@ export default {
 </script>
 
 <style lang='less' scoped>
-.van-nav-bar {
-  background-color: #1989fa;
-  .van-nav-bar__title {
-    color: #fff;
-    font-size: 18px;
-  }
-}
 .mybtn {
   padding: 10px;
   .van-button {
