@@ -27,7 +27,9 @@
     <div class="mybtn">
       <van-button type="info"
                   size="large"
-                  @click="doLogin">登录</van-button>
+                  @click="doLogin"
+                  :loading="isLoading"
+                  loading-type="spinner">登录</van-button>
     </div>
   </div>
 </template>
@@ -41,7 +43,8 @@ export default {
   data() {
     return {
       mobile: '18888888888',
-      code: '246810'
+      code: '246810',
+      isLoading: false
     }
   },
   methods: {
@@ -63,27 +66,32 @@ export default {
       this.$validator.localize('zh_CN', dict)
     },
 
-    doLogin() {
+    async doLogin() {
+      //开启加载动画
+      this.isLoading = true
       //所有校验成功后的逻辑代码
-      this.$validator.validate().then(async valid => {
-        if (valid) {
-          //校验成功的逻辑
-          try {
-            let res = await userLogin({
-              mobile: this.mobile,
-              code: this.code
-            })
-            // console.log(res)
-            //将用户信息保存到localstorage中
-            this.$store.commit('setUserInfo', res)
-            this.$router.push('/home')
-          } catch (error) {
-            this.$notify({ type: 'danger', message: '登录失败' })
-          }
+      let valid = await this.$validator.validate()
+      if (valid) {
+        //校验成功的逻辑
+        try {
+          let res = await userLogin({
+            mobile: this.mobile,
+            code: this.code
+          })
+          // console.log(res)
+          //将用户信息保存到localstorage中
+          this.$store.commit('setUserInfo', res)
+          this.$router.push('/home')
+        } catch (error) {
+          // toast轻提示错误
+          this.$toast('登录失败')
         }
-      })
+      }
+      //关闭加载动画
+      this.isLoading = false
     }
   },
+
   mounted() {
     //使用规则
     this.setRules()
