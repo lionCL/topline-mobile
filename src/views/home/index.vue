@@ -3,10 +3,10 @@
     <!-- nav导航 -->
     <van-nav-bar title="首页" />
     <!-- tab标签页 频道区域-->
-    <van-tabs>
-      <van-tab v-for="index in 8"
-               :title="'标签 ' + index"
-               :key="index">
+    <van-tabs v-model="tabActive">
+      <van-tab v-for="item in channleList"
+               :title="item.name"
+               :key="item.id">
         <!-- 内容下拉list菜单 -->
         <van-list v-model="loading"
                   :finished="finished"
@@ -15,6 +15,7 @@
           <van-cell v-for="item in list"
                     :key="item"
                     :title="item" />
+          内容
         </van-list>
       </van-tab>
       <!-- 字体图标插槽 -->
@@ -42,14 +43,22 @@
 </template>
 
 <script>
+//导入频道的pai
+import { getChannel } from '@/api/channel'
 export default {
+  name: 'home',
   data() {
     return {
-      active: 0,
+      //频道激活项目
+      tabActive: 0,
       loading: false,
       finished: false,
-      list: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 12, 12, 12, 12, 12],
-      isShow: false
+      // 下拉菜单list
+      list: [],
+      //是否显示popup弹出层
+      isShow: false,
+      //频道数据
+      channleList: []
     }
   },
   methods: {
@@ -57,10 +66,35 @@ export default {
     onLoad() {
       window.console.log('执行了')
     },
-    //点击显示所有频道
+    //点击显示popup弹出层显示所有频道
     doShow() {
       this.isShow = true
+    },
+    //获取频道
+    async getChannel() {
+      //判断用户是否登录
+      let { use } = this.$store.state
+      if (use) {
+        let res = await getChannel()
+        this.channleList = res.channels
+      } else {
+        // 没有登录
+        // 获取 localstorage 中的频道数据
+        let channelCache = JSON.parse(window.localStorage.getItem('channel'))
+        //如果缓存存在
+        if (channelCache) {
+          this.channleList = channelCache
+        } else {
+          //不存在 发送请求获取
+          let res = await getChannel()
+          this.channleList = res.channels
+        }
+      }
     }
+  },
+  mounted() {
+    //dom渲染最早完成的钩子函数
+    this.getChannel()
   }
 }
 </script>
