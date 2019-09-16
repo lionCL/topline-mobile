@@ -9,7 +9,7 @@ Vue.use(VueRouter)
 
 const routes = [
   { path: '/', redirect: '/home' },
-  { path: '/', component: TabBar, children: [{ path: '/home', component: Home, name: 'home' }] },
+  { path: '/', component: TabBar, children: [{ path: 'home', component: Home, name: 'home' }] },
   { path: '/login', component: Login, name: 'login' }
 ]
 
