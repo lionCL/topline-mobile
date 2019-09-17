@@ -28,7 +28,10 @@
     </van-tabs>
 
     <!-- 自定义组件 v-model 实现 由value和@input组合实现 -->
-    <channel v-model="isShow"></channel>
+    <channel v-model="isShow"
+             :myChannels='channelList'
+             :channelActive.sync="tabActive"></channel>
+    <!-- sync 修饰符表示 父子传值是双向数据绑定的 -->
   </div>
 </template>
 
