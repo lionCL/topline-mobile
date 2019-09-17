@@ -26,22 +26,9 @@
                 slot="nav-right"
                 @click="doShow" />
     </van-tabs>
-    <!-- popup弹出层 -->
-    <van-popup v-model="isShow"
-               position="bottom"
-               :style="{ height: '90%' }">
-      <!-- Grid 宫格 -->
-      <van-grid>
-        <van-grid-item icon="photo-o"
-                       text="文字" />
-        <van-grid-item icon="photo-o"
-                       text="文字" />
-        <van-grid-item icon="photo-o"
-                       text="文字" />
-        <van-grid-item icon="photo-o"
-                       text="文字" />
-      </van-grid>
-    </van-popup>
+
+    <!-- 自定义组件 v-model 实现 由value和@input组合实现 -->
+    <channel v-model="isShow"></channel>
   </div>
 </template>
 
@@ -49,6 +36,7 @@
 //导入频道的api
 import { getChannel } from '@/api/channel'
 import { getArticle } from '@/api/article'
+import channel from '@/views/home/components/channel'
 
 export default {
   name: 'home',
@@ -56,22 +44,20 @@ export default {
     return {
       //频道激活项目
       tabActive: 0,
-      // dropLoading: false,
-      // finished: false,
-      // pullLoading: false,
-      // 下拉菜单list
-      // list: [],
       //是否显示popup弹出层
       isShow: false,
       //频道数据
       channelList: []
     }
   },
+  components: {
+    channel
+  },
   methods: {
     //list列表 页面一加载就执行
     async onLoad() {
       //当前激活的频道对象
-      console.log('1111')
+      // console.log('1111')
       let activeChannle = this.channelList[this.tabActive]
 
       //判断数据是否加载完毕pre_timestamp 返回为null
@@ -138,16 +124,6 @@ export default {
         this.$set(item, 'pullLoading', false)
         // //添加上一页的时间戳
         this.$set(item, 'pre_timestamp', 0)
-        // //添加文章列表
-        // item.article = []
-        // //添加上拉属性
-        // item.dropLoading = false
-        // //添加上拉加载完毕
-        // item.finished = false
-        // //添加下拉刷新
-        // item.pullLoading = false
-        // //添加上一页的时间戳
-        // item.pre_timestamp = 0
       })
     },
     //获取频道
@@ -170,14 +146,13 @@ export default {
           this.channelList = res.channels
         }
       }
-
       // 给频道动态添加其它属性
       this.setChannelItem()
       // console.log(this.channelList)
     }
   },
-  mounted() {
-    //dom渲染最早完成的钩子函数
+  created() {
+    //最早获取数据的钩子函数
     this.getChannel()
   }
 }
@@ -205,7 +180,7 @@ export default {
 
 .van-icon {
   position: fixed;
-  top: 55px;
+  top: 58px;
   right: 5px;
   font-size: 20px;
 }
