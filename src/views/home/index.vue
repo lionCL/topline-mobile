@@ -71,60 +71,55 @@ export default {
     //list列表 页面一加载就执行
     async onLoad() {
       //当前激活的频道对象
-      let channle = this.channelList[this.tabActive]
+      console.log('1111')
+      let activeChannle = this.channelList[this.tabActive]
 
-      // 得到激活频道的 id
-      let channleid = channle.id
+      //判断数据是否加载完毕pre_timestamp 返回为null
+      if (activeChannle.pre_timestamp == null) {
+        //数据加载完毕 修改状态为结束
+        activeChannle.finished = true
+        activeChannle.dropLoading = false
+        return
+      }
       //判断是否第一次方法
-      if (channle.pre_timestamp === 0) {
+      if (activeChannle.pre_timestamp === 0) {
         // 动态请求文章数据
         let res = await getArticle({
-          channel_id: channleid,
+          channel_id: activeChannle.id,
           timestamp: Date.now(),
           with_top: 1
         })
-        channle.article = res.results
-        this.channelList = [...this.channelList]
-        channle.pre_timestamp = res.pre_timestamp
-        // 将加载的状态设置为 false
-        channle.dropLoading = false
-        channle.pullLoading = false
+        activeChannle.article = res.results
+        activeChannle.pre_timestamp = res.pre_timestamp
       } else {
         // 第二次进入
         let res = await getArticle({
-          channel_id: channleid,
-          timestamp: channle.pre_timestamp,
+          channel_id: activeChannle.id,
+          timestamp: activeChannle.pre_timestamp,
           with_top: 1
         })
-        // 将得到的数据源进行追加
-        channle.article = [...channle.article, ...res.results]
-        // 将页面上的数据动态变化
-        this.channelList = [...this.channelList]
-        channle.pre_timestamp = res.pre_timestamp
-        // 将加载的状态设置为 false
-        channle.dropLoading = false
-        channle.pullLoading = false
+        // 将得到的数据源进行追加到article中
+        activeChannle.article = [...activeChannle.article, ...res.results]
+        activeChannle.pre_timestamp = res.pre_timestamp
       }
+
+      //加载完毕后  修改dropLoading的状态为false
+      activeChannle.dropLoading = false
     },
     //下拉刷新函数
-    async onRefresh() {
-      //当前激活的频道对象
-      let channle = this.channelList[this.tabActive]
-      //跟新频道数据
-      channle.article = []
-      channle.drapLoading = false
-      channle.finished = false
-      channle.pre_timestamp = 0
-      //手动加载数据
-      let res = await getArticle({
-        channel_id: channle.id,
-        timestamp: Date.now(),
-        with_top: 1
-      })
-      channle.article = res.results
-      channle.pre_timestamp = res.pre_timestamp
-      channle.pullLoading = false
-      this.channelList = [...this.channelList]
+    onRefresh() {
+      // window.console.log('下拉执行了')
+      //得到当前激活的频道
+      let activeChannle = this.channelList[this.tabActive]
+      //重置属性
+      activeChannle.article = []
+      activeChannle.dropLoading = false
+      activeChannle.finished = false
+      activeChannle.pre_timestamp = 0
+      //刷新状态改为false
+      activeChannle.pullLoading = false
+      //重新请求数据
+      this.onLoad()
     },
     //点击显示popup弹出层显示所有频道
     doShow() {
@@ -133,16 +128,26 @@ export default {
     //动态给频道添加其他属性
     setChannelItem() {
       this.channelList.forEach(item => {
-        //添加文章列表
-        item.article = []
-        //添加上拉属性
-        item.dropLoading = false
-        //添加上拉加载完毕
-        item.finished = false
-        //添加下拉刷新
-        item.pullLoading = false
-        //添加上一页的时间戳
-        item.pre_timestamp = 0
+        //这样添加 动态添加的属性也会响应.
+        this.$set(item, 'article', [])
+        // //添加上拉属性
+        this.$set(item, 'dropLoading', false)
+        // //添加上拉加载完毕
+        this.$set(item, 'finished', false)
+        // //添加下拉刷新
+        this.$set(item, 'pullLoading', false)
+        // //添加上一页的时间戳
+        this.$set(item, 'pre_timestamp', 0)
+        // //添加文章列表
+        // item.article = []
+        // //添加上拉属性
+        // item.dropLoading = false
+        // //添加上拉加载完毕
+        // item.finished = false
+        // //添加下拉刷新
+        // item.pullLoading = false
+        // //添加上一页的时间戳
+        // item.pre_timestamp = 0
       })
     },
     //获取频道
@@ -168,6 +173,7 @@ export default {
 
       // 给频道动态添加其它属性
       this.setChannelItem()
+      // console.log(this.channelList)
     }
   },
   mounted() {
@@ -180,6 +186,7 @@ export default {
 <style lang="less" scoped>
 .home-wrap {
   margin-top: 90px;
+  margin-bottom: 50px;
 }
 .van-nav-bar {
   position: fixed;
