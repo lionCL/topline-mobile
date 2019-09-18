@@ -42,7 +42,7 @@ export default {
   name: 'login',
   data() {
     return {
-      mobile: '18888888888',
+      mobile: '13888888888',
       code: '246810',
       isLoading: false
     }

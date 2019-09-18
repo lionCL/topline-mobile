@@ -15,19 +15,40 @@
                     :finished="item.finished"
                     finished-text="没有更多了"
                     @load="onLoad">
+            <!-- 新闻数据 -->
             <van-cell v-for="(subitem,index) in item.article"
                       :key="index"
-                      :title="subitem.title" />
+                      :title="subitem.title">
+              <!-- 使用cell插槽定义 label属性-->
+              <template slot="label">
+                <!-- 图片展示 -->
+                <van-grid :border="false"
+                          :column-num="3">
+                  <van-grid-item v-for="(imgItem, imgIndex) in subitem.cover.images"
+                                 :key="imgIndex">
+                    <van-image :src="imgItem" />
+                  </van-grid-item>
+                </van-grid>
+                <!-- 作者 发布时间信息等展示 -->
+                <div class="authorInfo">
+                  <div class="left">
+                    <span>{{subitem.aut_name}}</span>
+                    <span>评论 {{subitem.comm_count}}</span>
+                    <span>{{subitem.pubdate}}</span>
+                  </div>
+                </div>
+              </template>
+            </van-cell>
           </van-list>
         </van-pull-refresh>
       </van-tab>
-      <!-- 字体图标插槽 -->
+      <!-- 字体图标插槽 弹出频道列表 -->
       <van-icon name="wap-nav"
                 slot="nav-right"
                 @click="doShow" />
     </van-tabs>
 
-    <!-- 自定义组件 v-model 实现 由value和@input组合实现 -->
+    <!-- 自定义组件 v-model 实现 由value和@input组合实现  弹出层 -->
     <channel v-model="isShow"
              :myChannels='channelList'
              :channelActive.sync="tabActive"></channel>
@@ -157,6 +178,7 @@ export default {
   created() {
     //最早获取数据的钩子函数
     this.getChannel()
+    window.console.log(this.channelList)
   }
 }
 </script>
@@ -188,7 +210,15 @@ export default {
   font-size: 20px;
 }
 
-.van-cell {
-  height: 100px;
+.authorInfo {
+  .left {
+    color: #999;
+    span {
+      margin-right: 10px;
+    }
+  }
 }
+// .van-cell {
+//   height: 100px;
+// }
 </style>
