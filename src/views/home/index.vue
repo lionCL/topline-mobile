@@ -34,7 +34,7 @@
                   <div class="left">
                     <span>{{subitem.aut_name}}</span>
                     <span>评论 {{subitem.comm_count}}</span>
-                    <span>{{subitem.pubdate}}</span>
+                    <span>{{subitem.pubdate | formDayDate}}</span>
                   </div>
                 </div>
               </template>
