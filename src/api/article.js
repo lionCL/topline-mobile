@@ -58,5 +58,6 @@ function thinkArticle(key) {
     }
   })
 }
+
 //暴露接口
 export { getArticle, disLike, setBlackList, reportArticle, thinkArticle }
