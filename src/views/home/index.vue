@@ -26,7 +26,8 @@
                           :column-num="3">
                   <van-grid-item v-for="(imgItem, imgIndex) in subitem.cover.images"
                                  :key="imgIndex">
-                    <van-image :src="imgItem" />
+                    <van-image :src="imgItem"
+                               lazy-load />
                   </van-grid-item>
                 </van-grid>
                 <!-- 作者 发布时间信息等展示 -->
@@ -36,6 +37,10 @@
                     <span>评论 {{subitem.comm_count}}</span>
                     <span>{{subitem.pubdate | formDayDate}}</span>
                   </div>
+                  <div class="right">
+                    <van-icon name="close"
+                              @click="openMore"></van-icon>
+                  </div>
                 </div>
               </template>
             </van-cell>
@@ -43,7 +48,8 @@
         </van-pull-refresh>
       </van-tab>
       <!-- 字体图标插槽 弹出频道列表 -->
-      <van-icon name="wap-nav"
+      <van-icon class="choosechal"
+                name="wap-nav"
                 slot="nav-right"
                 @click="doShow" />
     </van-tabs>
@@ -53,6 +59,10 @@
              :myChannels='channelList'
              :channelActive.sync="tabActive"></channel>
     <!-- sync 修饰符表示 父子传值是双向数据绑定的 -->
+
+    <!-- 更多操作操作 -->
+    <more v-model="isMore"></more>
+
   </div>
 </template>
 
@@ -61,6 +71,8 @@
 import { getChannel } from '@/api/channel'
 import { getArticle } from '@/api/article'
 import channel from '@/views/home/components/channel'
+//导入更多功能组件
+import more from '@/views/home/components/more'
 
 export default {
   name: 'home',
@@ -71,11 +83,14 @@ export default {
       //是否显示popup弹出层
       isShow: false,
       //频道数据
-      channelList: []
+      channelList: [],
+      //是否显示更多操作框
+      isMore: false
     }
   },
   components: {
-    channel
+    channel,
+    more
   },
   methods: {
     //list列表 页面一加载就执行
@@ -173,12 +188,16 @@ export default {
       // 给频道动态添加其它属性
       this.setChannelItem()
       // console.log(this.channelList)
+    },
+    //点击文件更多按钮事件
+    openMore() {
+      this.isMore = true
     }
   },
   created() {
     //最早获取数据的钩子函数
     this.getChannel()
-    window.console.log(this.channelList)
+    // window.console.log(this.channelList)
   }
 }
 </script>
@@ -203,7 +222,7 @@ export default {
   z-index: 999;
 }
 
-.van-icon {
+.choosechal {
   position: fixed;
   top: 58px;
   right: 5px;
@@ -211,6 +230,8 @@ export default {
 }
 
 .authorInfo {
+  display: flex;
+  justify-content: space-between;
   .left {
     color: #999;
     span {
