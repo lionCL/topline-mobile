@@ -39,7 +39,7 @@
                   </div>
                   <div class="right">
                     <van-icon name="close"
-                              @click="openMore"></van-icon>
+                              @click="openMore(subitem.art_id,subitem.aut_id)"></van-icon>
                   </div>
                 </div>
               </template>
@@ -61,7 +61,10 @@
     <!-- sync 修饰符表示 父子传值是双向数据绑定的 -->
 
     <!-- 更多操作操作 -->
-    <more v-model="isMore"></more>
+    <more v-model="isMore"
+          :authorId="authorId"
+          :activeArticleId="activeArticleId"
+          @delItem="delItem"></more>
 
   </div>
 </template>
@@ -85,7 +88,11 @@ export default {
       //频道数据
       channelList: [],
       //是否显示更多操作框
-      isMore: false
+      isMore: false,
+      //当前激活的文章
+      activeArticleId: 0,
+      //作者id
+      authorId: 0
     }
   },
   components: {
@@ -190,8 +197,26 @@ export default {
       // console.log(this.channelList)
     },
     //点击文件更多按钮事件
-    openMore() {
+    openMore(art_id, aut_id) {
       this.isMore = true
+      this.authorId = aut_id
+      this.activeArticleId = art_id
+      // console.log(this.activeArticleId)
+    },
+    //删除文章,子组件调用
+    delItem(id) {
+      //文章列表
+      let article = this.channelList[this.tabActive].article
+
+      //根据文章id,删除文章数据中对应的信息
+      article.forEach((item, index) => {
+        //找到对用的文章
+        if (item.art_id == id) {
+          //删除文章
+          article.splice(index, 1)
+          return
+        }
+      })
     }
   },
   created() {
