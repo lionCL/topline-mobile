@@ -1,6 +1,8 @@
 <template>
   <div>
-    {{this.$route.params.keyword}}
+    <!-- 顶部 -->
+    <van-nav-bar title="列表"
+                 left-arrow />
   </div>
 </template>
 
@@ -8,5 +10,8 @@
 export default {}
 </script>
 
-<style>
+<style lang="less" scoped>
+.van-icon-arrow-left {
+  color: #fff;
+}
 </style>
