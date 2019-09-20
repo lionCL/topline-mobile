@@ -59,5 +59,18 @@ function thinkArticle(key) {
   })
 }
 
+//根据关键字获取分页的数据
+function getSearchPage({ page, per_page, keyword }) {
+  return request({
+    url: '/app/v1_0/search',
+    method: 'get',
+    params: {
+      page,
+      per_page,
+      q: keyword
+    }
+  })
+}
+
 //暴露接口
-export { getArticle, disLike, setBlackList, reportArticle, thinkArticle }
+export { getArticle, disLike, setBlackList, reportArticle, thinkArticle, getSearchPage }

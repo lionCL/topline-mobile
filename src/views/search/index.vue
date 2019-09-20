@@ -41,7 +41,8 @@
                 :key="index"
                 :title="item"
                 icon="search"
-                clickable>
+                clickable
+                @click="doSearch(item)">
         <template slot="right-icon">
           <van-icon name="close"
                     v-show="isShow"
