@@ -14,11 +14,11 @@
                 thinkList"
                 :key="index"
                 icon="search"
-                @click="doSearch(item)">
+                @click="doSearch(item.item)">
         <!-- 内容title插槽 -->
         <template slot="title">
           <!-- 渲染联想的内容 -->
-          <div v-html="item"></div>
+          <div v-html="item.newItem"></div>
         </template>
       </van-cell>
     </van-cell-group>
@@ -43,7 +43,7 @@ export default {
     //点击完成时触发
     doSearch(key) {
       //获取关键字
-      this.$router.push(`/list/${this.keyword}`)
+      this.$router.push(`/list/${key}`)
     },
     //点击取消时候触发
     doCancel() {
@@ -69,10 +69,14 @@ export default {
 
         //处理关键字高光
         this.thinkList = this.thinkList.map(item => {
-          return item
-            .split(newVal)
-            .join(`<span style="color:blue">${newVal}</span>`)
+          return {
+            item,
+            newItem: item
+              .split(newVal)
+              .join(`<span style="color:blue">${newVal}</span>`)
+          }
         })
+        console.log(this.thinkList)
       }, 500)
     }
   }
