@@ -81,7 +81,10 @@ export default {
           // console.log(res)
           //将用户信息保存到localstorage中
           this.$store.commit('setUserInfo', res)
-          this.$router.push('/home')
+
+          // this.$router.push('/home')
+          // 应该返回访问这个登录页面之前的那个页面
+          this.$router.back()
         } catch (error) {
           // toast轻提示错误
           this.$toast('登录失败')

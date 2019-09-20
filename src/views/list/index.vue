@@ -101,7 +101,10 @@ export default {
       this.loading = false
     },
     //评论事件
-    comment() {}
+    comment() {
+      // 判断用户是否登录
+      this.$login()
+    }
   }
 }
 </script>

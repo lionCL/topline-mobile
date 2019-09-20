@@ -12,6 +12,9 @@ import Vant from 'vant'
 import 'vant/lib/index.css'
 import { Lazyload } from 'vant'
 
+//导入自己封装的登录插件
+import LoginPlugs from '@/utils/plugs/loginPlug.js'
+
 //导入validate验证插件 / 语法模块
 import VeeValidate, { Validator } from 'vee-validate'
 //导入validate语言包
@@ -33,7 +36,8 @@ Vue.use(VeeValidate, {
 
 //使用vant
 Vue.use(Vant)
-
+//使用登录插件
+Vue.use(LoginPlugs)
 //使用dayjs插件
 dayjs.extend(relativeTime)
 //使用语言包
