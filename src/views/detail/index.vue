@@ -20,7 +20,7 @@
       </template>
     </van-cell>
     <!--点赞&不喜欢-->
-    <likebtn></likebtn>
+    <likebtn :articleDetailList='articleDetailList'></likebtn>
     <!-- 评论区域-->
     <comment></comment>
     <!-- 留言区域-->

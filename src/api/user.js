@@ -33,5 +33,42 @@ function userNofollow(aut_id) {
   })
 }
 
+// 点赞
+function userDoLike(art_id) {
+  return request({
+    url: '/app/v1_0/article/likings',
+    method: 'post',
+    data: {
+      target: art_id
+    }
+  })
+}
+
+//取消点赞
+function userUnLike(art_id) {
+  return request({
+    url: `/app/v1_0/article/likings/${art_id}`,
+    method: 'DELETE'
+  })
+}
+
+//用户不喜欢
+function userHate(art_id) {
+  return request({
+    url: '/app/v1_0/article/dislikes',
+    method: 'post',
+    data: {
+      target: art_id
+    }
+  })
+}
+//取消不喜欢
+function userUnHate(art_id) {
+  return request({
+    url: `/app/v1_0/article/dislikes/${art_id}`,
+    method: 'DELETE'
+  })
+}
+
 //暴露方法
-export { userLogin, userDoFollow, userNofollow }
+export { userLogin, userDoFollow, userNofollow, userDoLike, userUnLike, userHate, userUnHate }
