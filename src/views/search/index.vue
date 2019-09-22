@@ -46,7 +46,7 @@
         <template slot="right-icon">
           <van-icon name="close"
                     v-show="isShow"
-                    @click="doDel(index)" />
+                    @click.stop="doDel(index)" />
         </template>
       </van-cell>
     </van-cell-group>

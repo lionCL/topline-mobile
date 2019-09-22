@@ -72,5 +72,21 @@ function getSearchPage({ page, per_page, keyword }) {
   })
 }
 
+//获取文章详情
+function getArticleDetail(article_id) {
+  return request({
+    url: `/app/v1_0/articles/${article_id}`,
+    method: 'get'
+  })
+}
+
 //暴露接口
-export { getArticle, disLike, setBlackList, reportArticle, thinkArticle, getSearchPage }
+export {
+  getArticle,
+  disLike,
+  setBlackList,
+  reportArticle,
+  thinkArticle,
+  getSearchPage,
+  getArticleDetail
+}

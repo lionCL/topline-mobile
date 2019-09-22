@@ -1,7 +1,6 @@
 import axios from 'axios'
 //创建一个axios实例对象
 import store from '@/store'
-import { async } from 'q'
 
 const instance = axios.create({
   baseURL: 'http://ttapi.research.itcast.cn'

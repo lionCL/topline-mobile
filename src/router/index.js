@@ -6,6 +6,7 @@ const Home = () => import('@/views/home/')
 const TabBar = () => import('@/views/tabBar/')
 const Search = () => import('@/views/search/')
 const List = () => import('@/views/list/')
+const Detail = () => import('@/views/detail/')
 
 Vue.use(VueRouter)
 
@@ -18,7 +19,8 @@ const routes = [
   },
   { path: '/login', component: Login, name: 'login' },
   { path: '/search', component: Search, name: 'search' },
-  { path: '/list/:keyword', component: List, name: 'list' }
+  { path: '/list/:keyword', component: List, name: 'list' },
+  { path: '/detail/:artid', component: Detail, name: 'detail' }
 ]
 
 const router = new VueRouter({

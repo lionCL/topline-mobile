@@ -15,5 +15,23 @@ function userLogin({ mobile, code }) {
   })
 }
 
+//用户关注作者
+function userDoFollow(aut_id) {
+  return request({
+    url: '/app/v1_0/user/followings',
+    method: 'post',
+    data: {
+      target: aut_id
+    }
+  })
+}
+//用户取消关注
+function userNofollow(aut_id) {
+  return request({
+    url: `/app/v1_0/user/followings/${aut_id}`,
+    method: 'DELETE'
+  })
+}
+
 //暴露方法
-export { userLogin }
+export { userLogin, userDoFollow, userNofollow }
