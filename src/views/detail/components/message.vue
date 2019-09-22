@@ -12,7 +12,8 @@
           <!-- 发送按钮 -->
           <div class="pullBtn">
             <van-button type="danger"
-                        size="small">发送</van-button>
+                        size="small"
+                        @click="sendMsg">发送</van-button>
           </div>
           <!-- 收藏 -->
           <van-icon name="star-o" />
@@ -23,11 +24,36 @@
 </template>
 
 <script>
+import { addComment } from '@/api/comment'
 export default {
   name: 'message',
+  props: ['artid'],
   data() {
     return {
       message: ''
+    }
+  },
+  methods: {
+    //给文章添加评论
+    async sendMsg() {
+      try {
+        //验证用户是否登陆
+        this.$login()
+        //将评论信息提交到服务器
+        let res = await addComment({
+          targetId: this.artid,
+          content: this.message
+        })
+        // console.log(res)
+        // console.log(this)
+        //清空输入框
+        this.message = ''
+        //将评论的信息提交到文章详情中
+        this.$emit('setComment', res)
+        this.$toast.success('评论成功')
+      } catch (error) {
+        this.$toast.fail(error.message)
+      }
     }
   }
 }

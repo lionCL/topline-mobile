@@ -52,6 +52,10 @@ Vue.filter('formDayDate', value => {
   return dayjs().from(dayjs(value))
 })
 
+Vue.filter('formateData', value => {
+  return dayjs(value).format('MM-DD HH:mm')
+})
+
 Vue.config.productionTip = false
 new Vue({
   render: h => h(App),
