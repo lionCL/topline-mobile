@@ -16,7 +16,8 @@
                         @click="sendMsg">发送</van-button>
           </div>
           <!-- 收藏 -->
-          <van-icon name="star-o" />
+          <van-icon name="star-o"
+                    v-if="firstMessage" />
         </div>
       </template>
     </van-cell>
@@ -27,7 +28,7 @@
 import { addComment } from '@/api/comment'
 export default {
   name: 'message',
-  props: ['artid'],
+  props: ['artid', 'firstMessage', 'commentid'],
   data() {
     return {
       message: ''
@@ -39,18 +40,41 @@ export default {
       try {
         //验证用户是否登陆
         this.$login()
-        //将评论信息提交到服务器
-        let res = await addComment({
-          targetId: this.artid,
-          content: this.message
-        })
-        // console.log(res)
-        // console.log(this)
-        //清空输入框
-        this.message = ''
-        //将评论的信息提交到文章详情中
-        this.$emit('setComment', res)
-        this.$toast.success('评论成功')
+
+        if (this.firstMessage) {
+          //将评论信息提交到服务器
+          let res = await addComment({
+            targetId: this.artid,
+            content: this.message
+          })
+          // console.log(res)
+          // console.log(this)
+          //清空输入框
+          this.message = ''
+          //将评论的信息提交到文章详情中
+          this.$emit('setComment', res)
+          this.$toast.success('评论成功')
+        } else {
+          //第二层回复
+          //将评论回复提交到服务器
+          let res = await addComment({
+            targetId: this.commentid,
+            content: this.message,
+            art_id: this.artid
+          })
+
+          console.log(res)
+          // console.log(this)
+          // console.log(this.commentid)
+          // console.log(this.message)
+          // console.log(this.artid)
+
+          //清空输入框
+          this.message = ''
+          //将评论的信息提交到文章详情中
+          this.$emit('setComment', res)
+          this.$toast.success('回复评论成功')
+        }
       } catch (error) {
         this.$toast.fail(error.message)
       }

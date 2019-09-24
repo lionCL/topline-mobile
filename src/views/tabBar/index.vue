@@ -7,11 +7,11 @@
                 route>
       <van-tabbar-item icon="home-o"
                        to="/home">首页</van-tabbar-item>
-      <van-tabbar-item icon="comment-o">问答</van-tabbar-item>
+      <van-tabbar-item icon="comment-o"
+                       to="/login">问答</van-tabbar-item>
       <van-tabbar-item icon="video-o"
                        to="/search">视频</van-tabbar-item>
-      <van-tabbar-item icon="user-o"
-                       to="/login">我的</van-tabbar-item>
+      <van-tabbar-item icon="user-o">我的</van-tabbar-item>
     </van-tabbar>
   </div>
 </template>

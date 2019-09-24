@@ -30,7 +30,8 @@
           <div>
             <span class="time">{{commentItem.pubdate | formateData}}</span>
             <span class="replayCount"
-                  @click="showPopup">回复({{commentItem.reply_count}})</span>
+                  @click="showPopup"
+                  v-if="firstComment">回复({{commentItem.reply_count}})</span>
           </div>
         </div>
       </template>
@@ -43,7 +44,7 @@
 import vueBus from '@/utils/eventBus'
 export default {
   name: 'comment',
-  props: ['commentItem'],
+  props: ['commentItem', 'firstComment'],
   methods: {
     showPopup() {
       vueBus.$emit('showPopup', {

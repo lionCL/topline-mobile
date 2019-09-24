@@ -5,42 +5,74 @@
                  title="文章详情"
                  left-arrow
                  @click-left="$router.back()" />
+
     <!-- 标题部分 -->
     <van-cell>
       <template slot="title">
         <div class="mytitle">{{articleDetailList.title}}</div>
       </template>
     </van-cell>
+
     <!-- 作者信息展示区 -->
     <author :articleDetailList='articleDetailList'></author>
+
     <!-- 文章内容 -->
     <van-cell>
       <template slot="title">
-        <div v-html="articleDetailList.content"></div>
+        <div class="artContet"
+             v-html="articleDetailList.content"></div>
       </template>
     </van-cell>
+
     <!--点赞&不喜欢-->
     <likebtn :articleDetailList='articleDetailList'></likebtn>
-    <!-- 评论区域-->
+
+    <!-- 评论渲染区域 comment-->
     <van-list v-model="loading"
               :finished="finished"
               finished-text="没有更多了"
               @load="getAllComment">
       <div v-for="(item, index) in commentList"
            :key="index">
-        <comment :commentItem="item"></comment>
+        <comment :commentItem="item"
+                 :firstComment='true'></comment>
       </div>
     </van-list>
 
-    <!-- 留言区域-->
+    <!-- 文章评论留言区域 message-->
     <message :artid='$route.params.artid'
-             @setComment="getComment"></message>
+             @setComment="getComment"
+             :firstMessage='true'></message>
 
     <!-- 回复评论 popub弹出层 -->
     <van-popup v-model="isShow"
                position="bottom"
                :style="{ height: '60%' }">
-      <comment :commentItem="currentCommentObj" />
+      <!-- 当前评论: -->
+      <comment :commentItem="currentCommentObj"
+               :firstComment='false' />
+      <!-- 留言回复区的留言组件 -->
+      <van-cell>
+        <template slot="title">
+          <h4>评论列表:</h4>
+        </template>
+      </van-cell>
+      <!-- 渲染服务器返回的评论 -->
+      <van-list v-model="replayLoading"
+                :finished="replayFinished"
+                finished-text="没有更多了"
+                @load="getAllReplayComment">
+        <div v-for="(item, index) in replayComment"
+             :key="index">
+          <comment :commentItem="item"
+                   :firstComment='false'></comment>
+        </div>
+      </van-list>
+      <!-- 发表评论message组件:  评论回复里面的 -->
+      <message :firstMessage='false'
+               :artid='$route.params.artid'
+               :commentid="currentCommentId"
+               @setComment="getReplayComment"></message>
     </van-popup>
   </div>
 </template>
@@ -78,18 +110,29 @@ export default {
       //当前的评论数据源
       currentCommentObj: {},
       //popup的显示隐藏
-      isShow: false
+      isShow: false,
+
+      //当前评论的id
+      currentCommentId: 0,
+      //当前的评论回复数据
+      replayComment: [],
+      replayendId: -1,
+      replayoffset: 0,
+      //评论回复组件里的list
+      replayLoading: false,
+      replayFinished: false
     }
   },
   mounted() {
     this.getAllDetail()
-    // this.getAllComment()
 
     //挂在eventBus 事件  注意箭头函数 不然this指向vueBus
     vueBus.$on('showPopup', obj => {
       this.isShow = obj.show
       this.currentCommentObj = obj
-      console.log(this.currentCommentObj)
+
+      //保存当前的评论id
+      this.currentCommentId = this.currentCommentObj.com_id
     })
   },
   methods: {
@@ -102,7 +145,7 @@ export default {
       // console.log(res)
       this.articleDetailList = res
     },
-    //获取评论数
+    //获取文章评论数
     async getAllComment() {
       //第一次请求
       if (this.offset === 0) {
@@ -115,7 +158,7 @@ export default {
         })
         // console.log(res)
         this.commentList = res.results
-        // console.log(this.commentList)
+        console.log(this.commentList)
         // console.log(this)
         this.offset = res.last_id
         this.end_id = res.end_id
@@ -143,9 +186,51 @@ export default {
 
       this.loading = false
     },
+    //获取评论回复
+    async getAllReplayComment() {
+      if (this.replayoffset == this.replayendId) {
+        this.replayLoading = false
+        this.replayFinished = true
+        return
+      }
+      //第一次请求
+      if (this.replayoffset === 0) {
+        let res = await getComments({
+          type: 'c',
+          source: this.currentCommentId,
+          limit: this.limit
+        })
+        this.replayComment = res.results
+        // console.log(res.results)
+        this.replayoffset = res.last_id
+        this.replayendId = res.end_id
+      } else {
+        let res = await getComments({
+          type: 'c',
+          source: this.currentCommentId,
+          offset: this.replayoffset,
+          limit: this.limit
+        })
+        //追加评论
+        this.replayComment = [...this.replayComment, ...res.results]
+        // console.log(this.replayComment + '----------------')
+        this.replayoffset = res.last_id
+        this.replayendId = res.end_id
+      }
+      //关闭加载
+      this.replayLoading = false
+    },
     //子组件传递过来的评论 动态添加到评论列表中
     getComment(value) {
       this.commentList.unshift({
+        ...value.new_obj,
+        art_id: value.art_id,
+        com_id: value.com_id
+      })
+    },
+    //得到评论回复完成之后的响应数据
+    getReplayComment(value) {
+      this.replayComment.unshift({
         ...value.new_obj,
         art_id: value.art_id,
         com_id: value.com_id
@@ -169,6 +254,15 @@ export default {
   margin-top: 46px;
   font-weight: 700;
   font-size: 20px;
+}
+.van-cell__title {
+  width: 100%;
+  .artContet {
+    width: 100%;
+    .pgc-img {
+      width: 100%;
+    }
+  }
 }
 
 .van-list {
