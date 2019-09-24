@@ -133,6 +133,11 @@ export default {
 
       //保存当前的评论id
       this.currentCommentId = this.currentCommentObj.com_id
+      // console.log('--------------------------------------当前的评论数据源')
+      // console.log(this.currentCommentObj)
+      // console.log('-------------------------当前评论id')
+      // console.log(this.currentCommentId)
+      // console.log('当前评论id为' + this.currentCommentId)
     })
   },
   methods: {
@@ -158,7 +163,7 @@ export default {
         })
         // console.log(res)
         this.commentList = res.results
-        console.log(this.commentList)
+        // console.log(this.commentList)
         // console.log(this)
         this.offset = res.last_id
         this.end_id = res.end_id
@@ -188,6 +193,7 @@ export default {
     },
     //获取评论回复
     async getAllReplayComment() {
+      // console.log('执行了第2个list')
       if (this.replayoffset == this.replayendId) {
         this.replayLoading = false
         this.replayFinished = true
@@ -201,7 +207,8 @@ export default {
           limit: this.limit
         })
         this.replayComment = res.results
-        // console.log(res.results)
+        // console.log('-----------评论的响应回的数据')
+        // console.log(res)
         this.replayoffset = res.last_id
         this.replayendId = res.end_id
       } else {

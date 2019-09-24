@@ -63,7 +63,7 @@ export default {
             art_id: this.artid
           })
 
-          console.log(res)
+          // console.log(res)
           // console.log(this)
           // console.log(this.commentid)
           // console.log(this.message)
