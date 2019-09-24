@@ -7,6 +7,7 @@ const TabBar = () => import('@/views/tabBar/')
 const Search = () => import('@/views/search/')
 const List = () => import('@/views/list/')
 const Detail = () => import('@/views/detail/')
+const My = () => import('@/views/my/')
 
 Vue.use(VueRouter)
 
@@ -15,7 +16,10 @@ const routes = [
   {
     path: '/',
     component: TabBar,
-    children: [{ path: 'home', component: Home, name: 'home' }]
+    children: [
+      { path: 'home', component: Home, name: 'home' },
+      { path: '/my', component: My, name: 'my' }
+    ]
   },
   { path: '/login', component: Login, name: 'login' },
   { path: '/search', component: Search, name: 'search' },
