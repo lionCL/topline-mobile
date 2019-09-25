@@ -70,5 +70,31 @@ function userUnHate(art_id) {
   })
 }
 
+//获取用户自己的信息
+function getUserInfo() {
+  return request({
+    url: '/app/v1_0/user',
+    method: 'get'
+  })
+}
+
+//获取用户个人信息
+function userProfile() {
+  return request({
+    url: '/app/v1_0/user/profile',
+    method: 'get'
+  })
+}
+
 //暴露方法
-export { userLogin, userDoFollow, userNofollow, userDoLike, userUnLike, userHate, userUnHate }
+export {
+  userLogin,
+  userDoFollow,
+  userNofollow,
+  userDoLike,
+  userUnLike,
+  userHate,
+  userUnHate,
+  getUserInfo,
+  userProfile
+}

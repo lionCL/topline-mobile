@@ -8,19 +8,26 @@
     <van-cell class="top">
       <template slot="title">
         <div class="userMsg">
-          <div class="left">
+          <div class="left"
+               @click="toPerson">
             <van-image width="48px"
                        height="48px"
                        fit="cover"
                        round
-                       src="https://img.yzcdn.cn/vant/cat.jpeg" />
+                       :src="userInfo.photo" />
           </div>
-          <div class="middle">
-            <van-cell title="黑马小公主">
+          <div class="middle"
+               @click="toPerson">
+            <van-cell :title="userInfo.name">
               <template slot="label">
                 <van-button type="primary"
+                            v-if="userInfo.certi==''"
                             round
                             size="mini">申请认证</van-button>
+                <van-button type="primary"
+                            v-else
+                            round
+                            size="mini">已认证</van-button>
               </template>
             </van-cell>
           </div>
@@ -40,7 +47,25 @@
             </div>
           </div>
         </div>
-
+        <van-grid :column-num="3">
+          <van-grid-item text="动态">
+            <template slot="icon">
+              {{userInfo.art_count}}
+            </template>
+          </van-grid-item>
+          <van-grid-item icon="photo-o"
+                         text="关注">
+            <template slot="icon">
+              {{userInfo.follow_count}}
+            </template>
+          </van-grid-item>
+          <van-grid-item icon="photo-o"
+                         text="粉丝">
+            <template slot="icon">
+              {{userInfo.fans_count}}
+            </template>
+          </van-grid-item>
+        </van-grid>
       </template>
     </van-cell>
     <!-- 状态区域 -->
@@ -86,7 +111,35 @@
 </template>
 
 <script>
-export default {}
+import { getUserInfo } from '@/api/user.js'
+export default {
+  name: 'my',
+  data() {
+    return {
+      //用户自己信息列表
+      userInfo: {}
+    }
+  },
+
+  created() {
+    this.getUserAllInfo()
+  },
+  methods: {
+    //获取用户自己信息
+    async getUserAllInfo() {
+      //检测用户是否登陆了
+      this.$login()
+      let res = await getUserInfo()
+      // console.log(res)
+      this.userInfo = res
+    },
+    //调转个人详情信息设置也
+    toPerson() {
+      this.$router.push({ name: 'person' })
+      //等同于 this.$router.push('/person)
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
