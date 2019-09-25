@@ -86,6 +86,19 @@ function userProfile() {
   })
 }
 
+//编辑用户图像
+function editUserIcon(photo) {
+  //注意 axios是 XMLHttprequest 对象 上传文件需要用formData格式
+  //将图片转换为formData格式
+  let fd = new FormData()
+  fd.append('photo', photo)
+  return request({
+    url: '/app/v1_0/user/photo',
+    method: 'patch',
+    data: fd
+  })
+}
+
 //暴露方法
 export {
   userLogin,
@@ -96,5 +109,6 @@ export {
   userHate,
   userUnHate,
   getUserInfo,
-  userProfile
+  userProfile,
+  editUserIcon
 }

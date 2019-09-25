@@ -15,7 +15,8 @@
     <van-cell-group>
       <van-cell title="头像"
                 is-link
-                center>
+                center
+                @click="changeImg">
         <template slot="default">
           <van-image :src="userProfileInfo.photo"
                      width="40px"
@@ -36,17 +37,24 @@
                 :value="userProfileInfo.birthday===''? '待完善':userProfileInfo.birthday"
                 is-link />
     </van-cell-group>
+    <!-- 弹出层:头像 -->
+    <icon v-model="showIcon"
+          @changeMyIcon='changeMyIcon'></icon>
   </div>
 </template>
 
 <script>
 //导入用户请求api
 import { userProfile } from '@/api/user.js'
+//导入头像弹出层组件
+import icon from '@/views/person/components/icon.vue'
 export default {
   name: 'person',
   data() {
     return {
-      userProfileInfo: {}
+      userProfileInfo: {},
+      //头像弹出层是否展示
+      showIcon: false
     }
   },
   mounted() {
@@ -56,11 +64,22 @@ export default {
     //加载用户个人资料
     async loadProfile() {
       let res = await userProfile()
-      console.log(res)
+      // console.log(res)
       this.userProfileInfo = res
     },
     //保存按钮功能
-    onSave() {}
+    onSave() {},
+    //更换头像选项
+    changeImg() {
+      this.showIcon = true
+    },
+    //修改用户头像
+    changeMyIcon(data) {
+      this.userProfileInfo.photo = data.photo
+    }
+  },
+  components: {
+    icon
   }
 }
 </script>
