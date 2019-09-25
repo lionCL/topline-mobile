@@ -99,6 +99,20 @@ function editUserIcon(photo) {
   })
 }
 
+//编辑用户个人信息
+function userInfoUpdate({ name, gender, birthday, intro }) {
+  return request({
+    url: '/app/v1_0/user/profile',
+    method: 'patch',
+    data: {
+      name,
+      gender,
+      birthday,
+      intro
+    }
+  })
+}
+
 //暴露方法
 export {
   userLogin,
@@ -110,5 +124,6 @@ export {
   userUnHate,
   getUserInfo,
   userProfile,
-  editUserIcon
+  editUserIcon,
+  userInfoUpdate
 }
