@@ -47,6 +47,8 @@
     <!-- 回复评论 popub弹出层 -->
     <van-popup v-model="isShow"
                position="bottom"
+               @open="openPopup"
+               @closed='closePopup'
                :style="{ height: '60%' }">
       <!-- 当前评论: -->
       <comment :commentItem="currentCommentObj"
@@ -130,14 +132,8 @@ export default {
     vueBus.$on('showPopup', obj => {
       this.isShow = obj.show
       this.currentCommentObj = obj
-
       //保存当前的评论id
       this.currentCommentId = this.currentCommentObj.com_id
-      // console.log('--------------------------------------当前的评论数据源')
-      // console.log(this.currentCommentObj)
-      // console.log('-------------------------当前评论id')
-      // console.log(this.currentCommentId)
-      // console.log('当前评论id为' + this.currentCommentId)
     })
   },
   methods: {
@@ -193,6 +189,7 @@ export default {
     },
     //获取评论回复
     async getAllReplayComment() {
+      // console.log('11111111')
       // console.log('执行了第2个list')
       if (this.replayoffset == this.replayendId) {
         this.replayLoading = false
@@ -242,6 +239,19 @@ export default {
         art_id: value.art_id,
         com_id: value.com_id
       })
+    },
+    //关闭弹出层
+    closePopup() {
+      // console.log('11111111')
+      this.replayComment = []
+      this.replayendId = -1
+      this.replayoffset = 0
+      this.replayFinished = false
+      this.replayLoading = false
+    },
+    openPopup() {
+      // console.log('222222')
+      this.getAllReplayComment()
     }
   },
   components: {
