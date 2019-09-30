@@ -103,7 +103,7 @@
       <van-cell title="用户反馈"
                 is-link />
       <van-cell title="小智同学"
-                is-link />
+                is-link to="/chat"/>
       <van-cell title="系统设置"
                 is-link />
     </van-cell-group>

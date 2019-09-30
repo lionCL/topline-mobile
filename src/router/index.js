@@ -9,6 +9,7 @@ const List = () => import('@/views/list/')
 const Detail = () => import('@/views/detail/')
 const My = () => import('@/views/my/')
 const Person = () => import('@/views/person/')
+const Chat = () => import('@/views/chat')
 
 Vue.use(VueRouter)
 
@@ -26,7 +27,8 @@ const routes = [
   { path: '/search', component: Search, name: 'search' },
   { path: '/list/:keyword', component: List, name: 'list' },
   { path: '/detail/:artid', component: Detail, name: 'detail' },
-  { path: '/person', component: Person, name: 'person' }
+  { path: '/person', component: Person, name: 'person' },
+  { path: '/chat', component: Chat, name: 'chat' }
 ]
 
 const router = new VueRouter({

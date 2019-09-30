@@ -41,6 +41,7 @@ export default {
       return this.$refs.myfile
     }
   },
+
   methods: {
     //打开文件
     openFile() {
